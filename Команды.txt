@@ -1,0 +1,31 @@
+1.	
+	User.objects.create(username='11')
+	User.objects.create(username='22')
+
+2.	
+	Author.objects.create(User.objects.get(id=1))
+	Author.objects.create(User.objects.get(id=2))
+
+3.	
+	Category.objects.create(name='1')
+	Category.objects.create(name='2')
+	Category.objects.create(name='3')
+	Category.objects.create(name='4')
+
+4.	
+	Post.objects.create(author=Author.objects.get(id=1),title='Zagolovok', post=article, 
+					category=(Category.objects.get(id=1),Category.objects.get(id=2)),
+					text='Post Text')
+
+	Post.objects.create(author=Author.objects.get(id=2),title='Zagolovok2', post=article, 
+					category=(Category.objects.get(id=2),Category.objects.get(id=3)),
+					text='Post Text2')
+	Post.objects.create(author=Author.objects.get(id=1),title='Zagolovok',
+					category=Category.objects.get(id=4),
+					text='Post Text3')
+5.
+	Comment.objects.create(author=Author.objects.get(id=1),post =Post.objects.get(id=1),text='comment Text1')
+	Comment.objects.create(author=Author.objects.get(id=2),post =Post.objects.get(id=2),text='comment Text2')
+	Comment.objects.create(author=Author.objects.get(id=1),post =Post.objects.get(id=1),text='comment Text3')
+
+8. Не получилось разобраться как работать с вызовом методов через консоль
