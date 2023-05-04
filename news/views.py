@@ -33,5 +33,5 @@ class PostAll(ListView):
 
 class NewsN(DetailView):
     model = Post
-    template_name = 'newsn'
+    template_name = 'newsn.html'
     context_object_name = 'newsn'

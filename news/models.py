@@ -20,6 +20,9 @@ class Author(models.Model):
             for e in list(Comment.objects.filter(post=i).values('rate')):
                 self.rate += int(e)
 
+    def __str__(self):
+        return f'{self.user.title()}: {self.rate}'
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -47,6 +50,9 @@ class Post(models.Model):
     def dislike(self):
         self.rate -= 1
         self.save()
+
+    def __str__(self):
+        return f'{self.title.title()}: {self.text[0:125]+"..."}'
 
     def preview(self):
         prev = self.text[0:125]+"..."
