@@ -11,14 +11,14 @@ class Author(models.Model):
 
     def rate_update(self):
         self.rate = 0
-        for e in list(Post.objects.filter(author=self.user).values('rate')):
-            self.rate += e['rate']
+        for e in list(Post.objects.filter(author=self.id).values('rate')):
+            self.rate += int(e)
         self.rate *= 3
-        for e in list(Comment.objects.filter(author=self.user).values('rate')):
-            self.rate += e['rate']
-        for i in Post.objects.filter(author=self.user):
+        for e in list(Comment.objects.filter(author=self.id).values('rate')):
+            self.rate += int(e)
+        for i in Post.objects.filter(author=self.id):
             for e in list(Comment.objects.filter(post=i).values('rate')):
-                self.rate += e['rate']
+                self.rate += int(e)
 
 
 class Category(models.Model):
@@ -36,15 +36,17 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     post = models.CharField(max_length=3, choices=POSTS, default=news)
     time_post = models.DateTimeField(default=timezone.now)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category, through='PostCategory')
     text = models.TextField()
     rate = models.IntegerField(default=0)
 
     def like(self):
         self.rate += 1
+        self.save()
 
     def dislike(self):
         self.rate -= 1
+        self.save()
 
     def preview(self):
         prev = self.text[0:125]+"..."
@@ -65,8 +67,11 @@ class Comment(models.Model):
 
     def like(self):
         self.rate += 1
+        self.save()
 
     def dislike(self):
         self.rate -= 1
+        self.save()
+
 
 

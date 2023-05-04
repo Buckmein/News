@@ -28,4 +28,9 @@
 	Comment.objects.create(author=Author.objects.get(id=2),post =Post.objects.get(id=2),text='comment Text2')
 	Comment.objects.create(author=Author.objects.get(id=1),post =Post.objects.get(id=1),text='comment Text3')
 
-8. Не получилось разобраться как работать с вызовом методов через консоль
+*
+    Author.objects.create(user=User.objects.get(id=3))
+    Category.objects.create(name='1')
+    Category.objects.get(id=1)
+    Post.objects.create(author=Author.objects.get(id=1), title='Патч 7.33', post='article', text='Небольшие изменения')
+    pc = PostCategory(category = Category.objects.get(id=3), post = Post.objects.get(id=1))
