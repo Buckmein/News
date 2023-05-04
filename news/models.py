@@ -2,6 +2,8 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.functions import Coalesce
+from django.db.models import Sum
 # Create your models here.
 
 
@@ -10,18 +12,18 @@ class Author(models.Model):
     rate = models.IntegerField(default=0)
 
     def rate_update(self):
-        self.rate = 0
-        for e in list(Post.objects.filter(author=self.id).values('rate')):
-            self.rate += int(e)
-        self.rate *= 3
-        for e in list(Comment.objects.filter(author=self.id).values('rate')):
-            self.rate += int(e)
-        for i in Post.objects.filter(author=self.id):
-            for e in list(Comment.objects.filter(post=i).values('rate')):
-                self.rate += int(e)
-
-    def __str__(self):
-        return f'{self.user.title()}: {self.rate}'
+        author_posts_rating = Post.objects.filter(author_id=self.pk).aggregate(
+            post_rating_sum=Coalesce(Sum('rate') * 3, 0))
+        author_comment_rating = Comment.objects.filter(user_id=self.user).aggregate(
+            comments_rating_sum=Coalesce(Sum('rate'), 0))
+        author_post_comment_rating = Comment.objects.filter(post__author__user=self.user).aggregate(
+            comments_rating_sum=Coalesce(Sum('rate'), 0))
+        print(author_posts_rating)
+        print(author_post_comment_rating)
+        print(author_post_comment_rating)
+        self.rate = author_posts_rating['post_rating_sum'] + author_comment_rating['comments_rating_sum'] \
+                    + author_post_comment_rating['comments_rating_sum']
+        self.save()
 
 
 class Category(models.Model):
@@ -52,7 +54,7 @@ class Post(models.Model):
         self.save()
 
     def __str__(self):
-        return f'{self.title.title()}: {self.text[0:125]+"..."}'
+        return self.title.title()
 
     def preview(self):
         prev = self.text[0:125]+"..."

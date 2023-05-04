@@ -3,12 +3,15 @@
 
 <!-- Название у нас будет -->
 {% block title %}
-Newsn
+<h1>Новость {{ post.title }} {{newsn.time_post}}</h1>
 {% endblock title %}
 
 <!-- В контенте на странице-->
 {% block content %}
-<h1>{{flatpage.title}}</h1>
+
 {{flatpage.content}}
 {{ newsn }}
+<hr>
+<hr>
+{{newsn.text}}
 {% endblock content %}
