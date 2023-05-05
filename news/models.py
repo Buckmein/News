@@ -11,6 +11,9 @@ class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rate = models.IntegerField(default=0)
 
+    def __str__(self):
+        return str(self.id)
+
     def rate_update(self):
         author_posts_rating = Post.objects.filter(author_id=self.pk).aggregate(
             post_rating_sum=Coalesce(Sum('rate') * 3, 0))
@@ -29,21 +32,25 @@ class Author(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def __str__(self):
+        return self.name.title()
+
 
 class Post(models.Model):
-    article = "art"
-    news = "nws"
     POSTS = [
-        (article, "Статья"),
-        (news, "Новость")
+        ("art", "Статья"),
+        ("nws", "Новость")
     ]
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    post = models.CharField(max_length=3, choices=POSTS, default=news)
+    post = models.CharField(max_length=3, choices=POSTS, default="nws")
     time_post = models.DateTimeField(default=timezone.now)
     category = models.ManyToManyField(Category, through='PostCategory')
     text = models.TextField()
     rate = models.IntegerField(default=0)
+
+    def get_type(self):
+        self.POSTS[self.post]
 
     def like(self):
         self.rate += 1
@@ -64,6 +71,9 @@ class Post(models.Model):
 class PostCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.category.name.title()
 
 
 class Comment(models.Model):

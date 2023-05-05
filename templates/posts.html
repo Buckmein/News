@@ -1,5 +1,5 @@
 {% extends 'flatpages/default.html' %}
-
+{% load custom_filters %}!
 {% block title %}
 <h1>Все новости</h1>
 {% endblock title %}
@@ -26,6 +26,7 @@
                <td>Заголовок</td>
                <td>Текст</td>
                <td>Рейтинг</td>
+               <td>ID</td>
            </tr>
 
            <!-- Для каждого товара будете генерироваться новая строчка,
@@ -40,11 +41,12 @@
                 в следующем столбце описание, и т.д.  -->
                <td>{{ post.author }}</td>
                <td>{{ post.post }}</td>
-               <td>{{ post.time_post }}</td>
-               <td>{{ post.category.category}}</td>
+               <td>{{ post.time_post|date:'M d Y G:i' }}</td>
+               <td>{{ post.category}}</td>
                <td>{{ post.title }}</td>
-               <td>{{ post.text|truncatewords:20}}</td>
+               <td>{{ post.text|truncatewords:20|cenz}}</td>
                <td>{{ post.rate }}</td>
+               <td>{{ post.id }}</td>
            </tr>
            {% endfor %}
 

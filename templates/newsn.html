@@ -1,5 +1,6 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
+{% load custom_filters %}!
 
 <!-- Название у нас будет -->
 {% block title %}
@@ -13,5 +14,5 @@
 {{ newsn }}
 <hr>
 <hr>
-{{newsn.text}}
+{{newsn.text|cenz}}
 {% endblock content %}
