@@ -19,14 +19,14 @@
    {% if allposts %}
        <table>
            <tr>
-               <td>Автор</td>
-               <td>Тип</td>
-               <td>Время написания</td>
-               <td>Категория</td>
                <td>Заголовок</td>
+               <td><!--Автор --></td>
+               <td>Время написания</td>
+               <td><!--Тип --></td>
+               <td><!--Категория --></td>
                <td>Текст</td>
                <td>Рейтинг</td>
-               <td>ID</td>
+               <td><!--ID --></td>
            </tr>
 
            <!-- Для каждого товара будете генерироваться новая строчка,
@@ -39,14 +39,14 @@
                 от переменных в Python. Здесь также можно получать доступ к
                 полям объекта модели. Например, здесь мы выводим имя,
                 в следующем столбце описание, и т.д.  -->
-               <td>{{ post.author }}</td>
-               <td>{{ post.post }}</td>
+               <td>{{ post.title|cenz }}</td>
+               <td><!-- {{ post.author }} --></td>
                <td>{{ post.time_post|date:'M d Y G:i' }}</td>
-               <td>{{ post.category}}</td>
-               <td>{{ post.title }}</td>
+               <td><!-- {{ post.post }} --></td>
+               <td><!-- {{ post.category}} --></td>
                <td>{{ post.text|truncatewords:20|cenz}}</td>
                <td>{{ post.rate }}</td>
-               <td>{{ post.id }}</td>
+               <td><!-- {{ post.id }} --></td>
            </tr>
            {% endfor %}
 

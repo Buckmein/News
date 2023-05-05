@@ -3,16 +3,15 @@
 {% load custom_filters %}!
 
 <!-- Название у нас будет -->
-{% block title %}
-<h1>Новость {{ post.title }} {{newsn.time_post}}</h1>
+{% block title%}
+<h2>{{newsn.title|cenz}}</h2>
+{{newsn.time_post|date:'M d Y G:i'}}
+<hr>
+Автор:Author{{newsn.author}}, Категория:{{newsn.category}}, Рейтинг: {{newsn.rate}}
+<hr>
 {% endblock title %}
-
 <!-- В контенте на странице-->
 {% block content %}
-
-{{flatpage.content}}
-{{ newsn }}
-<hr>
 <hr>
 {{newsn.text|cenz}}
 {% endblock content %}
