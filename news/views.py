@@ -23,6 +23,7 @@ class PostList(ListView):
     ordering = 'time_post'
     template_name = 'start.html'
     context_object_name = 'posts'
+    paginate_by = 2  # вот так мы можем указать количество записей на странице
 
 
 class PostAll(ListView):
@@ -30,6 +31,7 @@ class PostAll(ListView):
     ordering = 'time_post'
     template_name = 'posts.html'
     context_object_name = 'allposts'
+    paginate_by = 2  # вот так мы можем указать количество записей на странице
 
     def get_context_data(self, **kwargs):
         # С помощью super() мы обращаемся к родительским классам
