@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import *
 from datetime import datetime
+from .filters import PostFilter
 
 
 class AuthorList(ListView):
@@ -33,6 +34,18 @@ class PostAll(ListView):
     context_object_name = 'allposts'
     paginate_by = 2  # вот так мы можем указать количество записей на странице
 
+    # Переопределяем функцию получения списка товаров
+    def get_queryset(self):
+        # Получаем обычный запрос
+        queryset = super().get_queryset()
+        # Используем наш класс фильтрации.
+        # self.request.GET содержит объект QueryDict.
+        # Сохраняем нашу фильтрацию в объекте класса,
+        # чтобы потом добавить в контекст и использовать в шаблоне.
+        self.filterset = PostFilter(self.request.GET, queryset)
+        # Возвращаем из функции отфильтрованный список товаров
+        return self.filterset.qs
+
     def get_context_data(self, **kwargs):
         # С помощью super() мы обращаемся к родительским классам
         # и вызываем у них метод get_context_data с теми же аргументами,
@@ -44,6 +57,7 @@ class PostAll(ListView):
         # Добавим ещё одну пустую переменную,
         # чтобы на её примере рассмотреть работу ещё одного фильтра.
         context['new_post'] = "Свежие новости сегодня!"
+        context['filterset'] = self.filterset
         return context
 
 
