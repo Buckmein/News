@@ -34,3 +34,32 @@
     Category.objects.get(id=1)
     Post.objects.create(author=Author.objects.get(id=1), title='Патч 7.33', post='article', text='Небольшие изменения')
     pc = PostCategory(category = Category.objects.get(id=3), post = Post.objects.get(id=1))
+
+
+
+
+from django.db import models
+from datetime import datetime
+from django.contrib.auth.models import User
+from django.utils import timezone
+from models import *
+users = (2, 6,7,8)
+Author.objects.create(user=User.objects.get(id=3))
+Category.objects.create(name='1')
+Category.objects.get(id=1)
+Post.objects.create(author=Author.objects.get(id=1), title='Патч 7.33', post='article', text='Небольшие изменения')
+pc = PostCategory(category = Category.objects.get(id=3), post = Post.objects.get(id=1))
+Post.objects.create(author=Author.objects.get(id=2), title='Доллар', post='article', text='Небольшие изменения')
+PostCategory.objects.create(category = Category.objects.get(id=1), post = Post.objects.get(id=2))
+Post.objects.create(author=Author.objects.get(id=2), title='Президент', post='article', text='Американский')
+PostCategory.objects.create(category = Category.objects.get(id=2), post = Post.objects.get(id=3))
+Post.objects.create(author=Author.objects.get(id=2), title='Фильм про политику', post='article', text='Американский')
+PostCategory.objects.create(category = Category.objects.get(id=4), post = Post.objects.get(id=4))
+Comment.objects.create(user=User.objects.get(id=2),post =Post.objects.get(id=1),text='Эти ваши танки...')
+Comment.objects.create(user=User.objects.get(id=6),post =Post.objects.get(id=1),text='Это вообщето про контер стрик')
+Comment.objects.create(user=User.objects.get(id=7),post =Post.objects.get(id=2),text='Я богатый')
+Comment.objects.create(user=User.objects.get(id=8),post =Post.objects.get(id=2),text='Я бедный')
+Comment.objects.create(user=User.objects.get(id=8),post =Post.objects.get(id=3),text='Плохой человек')
+Comment.objects.create(user=User.objects.get(id=7),post =Post.objects.get(id=3),text='А он неплох')
+Comment.objects.create(user=User.objects.get(id=7),post =Post.objects.get(id=4),text='7 раз сходил')
+Comment.objects.create(user=User.objects.get(id=8),post =Post.objects.get(id=4),text='Были бы деньги не пошел бы')

@@ -1,4 +1,5 @@
-from django_filters import FilterSet, ModelChoiceFilter, ModelMultipleChoiceFilter
+from django_filters import FilterSet, ModelChoiceFilter, ModelMultipleChoiceFilter, DateFilter
+from django.forms import DateInput
 from .models import Post, Category
 
 # Создаем свой набор фильтров для модели Posts.
@@ -6,6 +7,13 @@ from .models import Post, Category
 
 
 class PostFilter(FilterSet):
+
+    date = DateFilter(field_name='time_post',
+                      widget=DateInput(attrs={'type': 'date'}),
+                      label='Не раньше:',
+                      lookup_expr='date__gte'
+                      )
+
     category = ModelChoiceFilter(field_name='postcategory__category',
 queryset=Category.objects.all(),
 label='Категория',
@@ -22,12 +30,8 @@ empty_label='Любая')
            # поиск заголовку
            'title': ['icontains'],
            # поиск автору
-           #'author': ['icontains'],
+           'author__user': ['exact'],
            # поиск категории
            # рейтинг должен быть больше или равен
            'rate': ['gt'],
-           #'time_post': [
-           #    'lt',  # дата должна быть меньше или равна указанной
-            #    'gt',  # дата должна быть больше или равна указанной
-           #],
        }

@@ -1,9 +1,15 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView, DeleteView
+)
+from django.urls import reverse_lazy
 from .models import *
 from datetime import datetime
 from .filters import PostFilter
-
+from .forms import PostForm
+from django.shortcuts import redirect, render
+from django.http import HttpResponse, HttpResponseRedirect
+from pprint import pprint
 
 class AuthorList(ListView):
     # Указываем модель, объекты которой мы будем выводить
@@ -24,7 +30,7 @@ class PostList(ListView):
     ordering = 'time_post'
     template_name = 'start.html'
     context_object_name = 'posts'
-    paginate_by = 2  # вот так мы можем указать количество записей на странице
+    paginate_by = 10  # вот так мы можем указать количество записей на странице
 
 
 class PostAll(ListView):
@@ -65,3 +71,59 @@ class NewsN(DetailView):
     model = Post
     template_name = 'newsn.html'
     context_object_name = 'newsn'
+
+
+class NewsCreate(CreateView):
+    # Указываем нашу разработанную форму
+    form_class = PostForm
+    # модель товаров
+    model = Post
+    # и новый шаблон, в котором используется форма.
+    template_name = 'post_edit.html'
+
+    def form_valid(self, form):
+        news = form.save(commit=False)
+        news.posts = 'nws'
+        return super().form_valid(form)
+
+
+class ArticleCreate(CreateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'art_edit.html'
+
+    def form_valid(self, form):
+        article = form.save(commit=False)
+        article.post = 'art'
+        return super().form_valid(form)
+
+
+class NewsUpdate(UpdateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'post_edit.html'
+
+
+class ArticleUpdate(UpdateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'article_edit.html'
+
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('post_list')
+
+
+def create_post(request):
+    form = PostForm
+
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/news')
+
+
+    return render(request, 'post_edit.html', {'form':form})

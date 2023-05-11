@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import Sum
+from django.urls import reverse
 # Create your models here.
 
 
@@ -67,13 +68,16 @@ class Post(models.Model):
         prev = self.text[0:125]+"..."
         return prev
 
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
+
 
 class PostCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.category.name.title()
+        return self.category.name
 
 
 class Comment(models.Model):

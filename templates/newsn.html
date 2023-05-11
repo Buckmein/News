@@ -7,7 +7,7 @@
 <h2>{{newsn.title|cenz}}</h2>
 {{newsn.time_post|date:'M d Y G:i'}}
 <hr>
-Автор:Author{{newsn.author}}, Категория:{{newsn.category}}, Рейтинг: {{newsn.rate}}
+Автор:{{newsn.author.user}}, Категория:{{object.category}}, Рейтинг: {{newsn.rate}}
 <hr>
 {% endblock title %}
 <!-- В контенте на странице-->
