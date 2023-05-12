@@ -79,7 +79,7 @@ class NewsCreate(CreateView):
     # модель товаров
     model = Post
     # и новый шаблон, в котором используется форма.
-    template_name = 'post_edit.html'
+    template_name = 'news_edit.html'
 
     def form_valid(self, form):
         news = form.save(commit=False)
@@ -101,13 +101,13 @@ class ArticleCreate(CreateView):
 class NewsUpdate(UpdateView):
     form_class = PostForm
     model = Post
-    template_name = 'post_edit.html'
+    template_name = 'news_edit.html'
 
 
 class ArticleUpdate(UpdateView):
     form_class = PostForm
     model = Post
-    template_name = 'article_edit.html'
+    template_name = 'art_edit.html'
 
 
 class PostDelete(DeleteView):
@@ -126,4 +126,4 @@ def create_post(request):
             return HttpResponseRedirect('/news')
 
 
-    return render(request, 'post_edit.html', {'form':form})
+    return render(request, 'news_edit.html', {'form':form})
