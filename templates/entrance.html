@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 style="text-align: center;"><strong>Добро пожаловать! </strong></h1>
+<h1 style="text-align: center;"><strong>У нас всегда интересные новости!</strong></h1>
+<p style="text-align: center;"><strong><a class="btn" href="{% url 'account_signup' %}">РЕГИСТРАЦИЯ</a></strong></p>
+{% if is_not_authors %}
+<button> <a href="{% url 'upgrade' %}"> Стать Автором!</a> </button>
+{% endif %}
+</body>
+</html>

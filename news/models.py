@@ -7,6 +7,7 @@ from django.db.models import Sum
 from django.urls import reverse
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
+
 # Create your models here.
 
 
@@ -105,6 +106,7 @@ class CommonSignupForm(SignupForm):
         common_group = Group.objects.get(name='User')
         common_group.user_set.add(user)
         return user
+
 
 class Entrance(models.Model):
     enter = models.TextField()

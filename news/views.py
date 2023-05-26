@@ -1,16 +1,16 @@
-from django.shortcuts import render
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
 )
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from .models import *
 from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
 from django.shortcuts import redirect, render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from pprint import pprint
 
@@ -132,5 +132,48 @@ def create_post(request):
     return render(request, 'news_edit.html', {'form':form})
 
 
-class IndexView(LoginRequiredMixin, TemplateView):
-    template_name = 'protect/index.html'
+class EntranceList(ListView):
+    model = Entrance
+    template_name = 'entrance.html'
+    context_object_name = 'entrance'
+
+    def entrance(request):
+        return render(request, 'entrance.html')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        return context
+
+@login_required
+def upgrade_me(request):
+    user = request.user
+    authors_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        authors_group.user_set.add(user)
+    return redirect('/')
+
+class CategoryListView(ListView):
+    model = Post
+    template_name = 'category_list.html'
+    context_object_name = 'category_list'
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+        queryset = Post.objects.filter(category=self.category)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
+        context['category'] = self.category
+        return context
+
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.add(user)
+
+    massage = 'Вы подписаны на рассылку новостей категории'
+    return render(request, 'subscribe.html', {'category': category, 'massage': massage})
