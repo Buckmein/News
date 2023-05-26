@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import Sum
 from django.urls import reverse
+from allauth.account.forms import SignupForm
+from django.contrib.auth.models import Group
 # Create your models here.
 
 
@@ -94,6 +96,18 @@ class Comment(models.Model):
     def dislike(self):
         self.rate -= 1
         self.save()
+
+
+class CommonSignupForm(SignupForm):
+
+    def save(self, request):
+        user = super(CommonSignupForm, self).save(request)
+        common_group = Group.objects.get(name='User')
+        common_group.user_set.add(user)
+        return user
+
+class Entrance(models.Model):
+    enter = models.TextField()
 
 
 

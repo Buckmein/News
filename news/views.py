@@ -9,6 +9,9 @@ from .filters import PostFilter
 from .forms import PostForm
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
 from pprint import pprint
 
 class AuthorList(ListView):
@@ -127,3 +130,7 @@ def create_post(request):
 
 
     return render(request, 'news_edit.html', {'form':form})
+
+
+class IndexView(LoginRequiredMixin, TemplateView):
+    template_name = 'protect/index.html'

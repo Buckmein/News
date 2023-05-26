@@ -19,4 +19,5 @@ urlpatterns = [
    path('news/<int:pk>/update/', NewsUpdate.as_view(), name='news_update'),
    path('news/<int:pk>/delete/', PostDelete.as_view(), name='art_delete'),
    path('article/<int:pk>/delete/', PostDelete.as_view(), name='news_delete'),
+   path('sign/', IndexView.as_view()),
 ]
